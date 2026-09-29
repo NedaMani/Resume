@@ -3,8 +3,8 @@
 
   "latex-workshop.latex.tools": [
     {
-      "name": "latexmk-filtered",
-      "command": "./filter-latexmk.sh",
+      "name": "latexmk-xelatex",
+      "command": "latexmk",
       "args": [
         "-xelatex",
         "-synctex=1",
@@ -19,7 +19,9 @@
   "latex-workshop.latex.recipes": [
     {
       "name": "XeLaTeX",
-      "tools": ["latexmk-filtered"]
+      "tools": [
+        "latexmk-xelatex"
+      ]
     }
   ],
 
