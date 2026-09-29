@@ -14,6 +14,23 @@
 % If you would like to change the social information separator from a pipe (|) to something else
 \renewcommand{\acvHeaderSocialSep}{\enspace\textbar\enspace}
 
+%-------------------------------------------------------------------------------
+% TYPOGRAPHY
+%-------------------------------------------------------------------------------
+% Slightly better fit/justification quality (font expansion + protrusion).
+\usepackage{microtype}
+
+% Line-breaking policy.
+% A CV is a list of short items, bullets and proper nouns, so a mid-word break
+% ("architec- / tures") reads much worse than a slightly looser line. Turning
+% hyphenation off is not enough on its own though: TeX would then have no legal
+% break point and would let lines run into the margin (overfull \hbox).
+% Disabling hyphenation while letting the word spaces absorb the slack
+% (\emergencystretch) keeps the text justified *and* inside the text block.
+\hyphenpenalty=10000    % no automatic mid-word breaks
+\exhyphenpenalty=10000  % never break at an existing hyphen (front-end, AI-assisted, ...)
+\tolerance=9999         % accept the natural, stretched line breaks from above
+\emergencystretch=1em   % glue available to TeX before a line would overflow
 
 %-------------------------------------------------------------------------------
 %	PERSONAL INFORMATION
