@@ -42,6 +42,8 @@
 \RequirePackage[default,opentype]{sourcesanspro}
 % Needed for the optional profile picture (\photo)
 \RequirePackage{tikz}
+% Needed for the 'fill overzoom image' key used to crop the photo to a circle
+\RequirePackage{tikzfill}
 % Needed to deal a paragraphs
 \RequirePackage{parskip}
 % Needed to deal hyperlink
