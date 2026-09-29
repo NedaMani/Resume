@@ -1,0 +1,35 @@
+%% awesome-cv/sections.sty
+% Section and subsection titles.
+\ProvidesPackage{awesome-cv/sections}[2026/09/28 v2.0 Awesome-CV sections]
+
+% Section spacing knobs (user-configurable via \renewcommand)
+\newcommand{\acvSectionTopSkip}{3mm}
+\newcommand{\acvSectionContentTopSkip}{2.5mm}
+
+% Define a section for CV
+% Usage: \cvsection{<section-title>}
+\newcommand{\cvsection}[1]{%
+  \vspace{\acvSectionTopSkip}
+  \sectionstyle{#1}
+  \phantomsection
+  \color{sectionDividerColor}\vhrulefill{0.9pt}
+}
+
+% Define a subsection for CV
+% Usage: \cvsubsection{<subsection-title>}
+\newcommand{\cvsubsection}[1]{%
+  \vspace{\acvSectionContentTopSkip}
+  \vspace{-3mm}
+  \subsectionstyle{#1}
+  \phantomsection
+}
+
+% Define a paragraph for CV
+\newenvironment{cvparagraph}{%
+  \vspace{\acvSectionContentTopSkip}
+  \vspace{-3mm}
+  \paragraphstyle
+}{%
+  \par
+  \vspace{2mm}
+}

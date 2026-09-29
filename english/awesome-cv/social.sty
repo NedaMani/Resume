@@ -1,0 +1,206 @@
+%% awesome-cv/social.sty
+% Generic social/contact link mechanism + per-platform registry.
+%
+% Storage: \@social@<key> holds a comma-separated value list (1 or 2 values).
+% Registry: \@social@icon@<key>, \@social@url@<key>, \@social@disp@<key>
+%           (url/disp templates take 2 args: #1=val1, #2=val2).
+% Order:    \@acv@social@order (comma-separated list of keys).
+% Render:   \forlistloop{\@acv@rendersocial}{\@acv@social@order}
+\ProvidesPackage{awesome-cv/social}[2026/09/28 v2.0 Awesome-CV social]
+
+% Public configuration: set a social field generically.
+% Usage: \cvsetsocial{github}{username}
+%        \cvsetsocial{stackoverflow}{id}{name}  (multi-value via comma)
+\newcommand*{\cvsetsocial}[2]{\csdef{@social@#1}{#2}}
+
+% --- Platform registry ---
+% Each entry: icon, url template (#1=val1 #2=val2), display template.
+% Empty url template => rendered as plain text (no hyperlink).
+
+\csdef{@social@icon@mobile}{\faMobile}
+\csdef{@social@url@mobile}#1#2{tel:#2}
+\csdef{@social@disp@mobile}#1#2{#1}
+
+\csdef{@social@icon@email}{\faEnvelope}
+\csdef{@social@url@email}#1#2{mailto:#1}
+\csdef{@social@disp@email}#1#2{#1}
+
+\csdef{@social@icon@dateofbirth}{\faBirthdayCake}
+\csdef{@social@url@dateofbirth}#1#2{}
+\csdef{@social@disp@dateofbirth}#1#2{#1}
+
+\csdef{@social@icon@homepage}{\faHome}
+\csdef{@social@url@homepage}#1#2{http://#1}
+\csdef{@social@disp@homepage}#1#2{#1}
+
+\csdef{@social@icon@github}{\faGithubSquare}
+\csdef{@social@url@github}#1#2{https://github.com/#1}
+\csdef{@social@disp@github}#1#2{#1}
+
+\csdef{@social@icon@gitlab}{\faGitlab}
+\csdef{@social@url@gitlab}#1#2{https://gitlab.com/#1}
+\csdef{@social@disp@gitlab}#1#2{#1}
+
+\csdef{@social@icon@bitbucket}{\faBitbucket}
+\csdef{@social@url@bitbucket}#1#2{https://bitbucket.com/#1}
+\csdef{@social@disp@bitbucket}#1#2{#1}
+
+\csdef{@social@icon@stackoverflow}{\faStackOverflow}
+\csdef{@social@url@stackoverflow}#1#2{https://stackoverflow.com/users/#1}
+\csdef{@social@disp@stackoverflow}#1#2{#2}
+
+\csdef{@social@icon@linkedin}{\faLinkedin}
+\csdef{@social@url@linkedin}#1#2{https://www.linkedin.com/in/#1}
+\csdef{@social@disp@linkedin}#1#2{#1}
+
+\csdef{@social@icon@orcid}{\faOrcid}
+\csdef{@social@url@orcid}#1#2{https://orcid.org/#1}
+\csdef{@social@disp@orcid}#1#2{#1}
+
+\csdef{@social@icon@twitter}{\faTwitter}
+\csdef{@social@url@twitter}#1#2{https://twitter.com/#1}
+\csdef{@social@disp@twitter}#1#2{#1}
+
+\csdef{@social@icon@mastodon}{\faMastodon}
+\csdef{@social@url@mastodon}#1#2{https://#1/@#2}
+\csdef{@social@disp@mastodon}#1#2{#2}
+
+\csdef{@social@icon@skype}{\faSkype}
+\csdef{@social@url@skype}#1#2{}
+\csdef{@social@disp@skype}#1#2{#1}
+
+\csdef{@social@icon@reddit}{\faReddit}
+\csdef{@social@url@reddit}#1#2{https://www.reddit.com/user/#1}
+\csdef{@social@disp@reddit}#1#2{#1}
+
+\csdef{@social@icon@researchgate}{\faResearchgate}
+\csdef{@social@url@researchgate}#1#2{https://www.researchgate.net/profile/#1}
+\csdef{@social@disp@researchgate}#1#2{#1}
+
+\csdef{@social@icon@xing}{\faXingSquare}
+\csdef{@social@url@xing}#1#2{https://www.xing.com/profile/#1}
+\csdef{@social@disp@xing}#1#2{#1}
+
+\csdef{@social@icon@medium}{\faMedium}
+\csdef{@social@url@medium}#1#2{https://medium.com/@#1}
+\csdef{@social@disp@medium}#1#2{#1}
+
+\csdef{@social@icon@kaggle}{\faKaggle}
+\csdef{@social@url@kaggle}#1#2{https://kaggle.com/#1}
+\csdef{@social@disp@kaggle}#1#2{#1}
+
+\csdef{@social@icon@hackerrank}{\faHackerrank}
+\csdef{@social@url@hackerrank}#1#2{https://www.hackerrank.com/#1}
+\csdef{@social@disp@hackerrank}#1#2{#1}
+
+\csdef{@social@icon@googlescholar}{\faGraduationCap}
+\csdef{@social@url@googlescholar}#1#2{https://scholar.google.com/citations?user=#1}
+\csdef{@social@disp@googlescholar}#1#2{#2}
+
+\csdef{@social@icon@extrainfo}{}
+\csdef{@social@url@extrainfo}#1#2{}
+\csdef{@social@disp@extrainfo}#1#2{#1}
+
+% --- Render order (preserves original header layout) ---
+\def\@acv@social@order{mobile,email,dateofbirth,homepage,github,gitlab,bitbucket,stackoverflow,linkedin,orcid,twitter,mastodon,skype,reddit,researchgate,xing,medium,kaggle,hackerrank,googlescholar,extrainfo}
+
+% --- Renderer ---
+% Render a single social entry (called by the loop for each key).
+\newcommand*{\@acv@rendersocial}[1]{% {key}
+  \ifcsvoid{@social@#1}{}{%
+    \ifbool{acv@social@start}%
+      {\setbool{acv@social@start}{false}}%
+      {\acvHeaderSocialSep}%
+    \edef\@acv@social@val{\csuse{@social@#1}}%
+    \expandafter\@acv@social@split\@acv@social@val,{},\@acv@social@nil{#1}%
+  }%
+}
+
+% Split comma-separated value and render.
+\def\@acv@social@split#1,#2,#3\@acv@social@nil#4{% {val1}{val2}{rest}{key}
+  \edef\@acv@social@url{\csuse{@social@url@#4}{#1}{#2}}%
+  \ifthenelse{\equal{\@acv@social@url}{}}%
+    {\csuse{@social@icon@#4}\acvHeaderIconSep\csuse{@social@disp@#4}{#1}{#2}}%
+    {\href{\@acv@social@url}{\csuse{@social@icon@#4}\acvHeaderIconSep\csuse{@social@disp@#4}{#1}{#2}}}%
+}
+
+% --- Individual setters (backward-compatible wrappers) ---
+
+% Defines writer's mobile (optional)
+% Usage: \mobile{<mobile number>}
+\newcommand*{\mobile}[1]{%
+  \def\@mobile{#1}%
+  \def\@acv@telnum{#1}%
+  \StrDel{\@acv@telnum}{ }[\@acv@telnum]%
+  \StrDel{\@acv@telnum}{-}[\@acv@telnum]%
+  \StrDel{\@acv@telnum}{(}[\@acv@telnum]%
+  \StrDel{\@acv@telnum}{)}[\@acv@telnum]%
+  \cvsetsocial{mobile}{\@mobile,\@acv@telnum}%
+}
+
+% Defines writer's email (optional)
+\newcommand*{\email}[1]{\cvsetsocial{email}{#1}}
+
+% Defines writer's date of birth (optional)
+\newcommand*{\dateofbirth}[1]{\cvsetsocial{dateofbirth}{#1}}
+
+% Defines writer's homepage (optional)
+\newcommand*{\homepage}[1]{\cvsetsocial{homepage}{#1}}
+
+% Defines writer's github (optional)
+\newcommand*{\github}[1]{\cvsetsocial{github}{#1}}
+
+% Defines writer's gitlab (optional)
+\newcommand*{\gitlab}[1]{\cvsetsocial{gitlab}{#1}}
+
+% Defines writer's bitbucket (optional)
+\newcommand*{\bitbucket}[1]{\cvsetsocial{bitbucket}{#1}}
+
+% Defines writer's stackoverflow profile (optional)
+% Usage: \stackoverflow{<so userid>}{<so username>}
+\newcommand*{\stackoverflow}[2]{\cvsetsocial{stackoverflow}{#1,#2}}
+
+% Defines writer's linked-in (optional)
+\newcommand*{\linkedin}[1]{\cvsetsocial{linkedin}{#1}}
+
+% Defines writer's orcid (optional)
+\newcommand*{\orcid}[1]{\cvsetsocial{orcid}{#1}}
+
+% Defines writer's twitter (optional)
+\newcommand*{\twitter}[1]{\cvsetsocial{twitter}{#1}}
+
+% Defines writer's Mastodon (optional)
+% Usage: \mastodon{<instance>}{<mastodon-nick>}
+\newcommand*{\mastodon}[2]{\cvsetsocial{mastodon}{#1,#2}}
+
+% Defines writer's researchgate (optional)
+\newcommand*{\researchgate}[1]{\cvsetsocial{researchgate}{#1}}
+
+% Defines writer's skype (optional)
+\newcommand*{\skype}[1]{\cvsetsocial{skype}{#1}}
+
+% Defines writer's reddit (optional)
+\newcommand*{\reddit}[1]{\cvsetsocial{reddit}{#1}}
+
+% Defines writer's xing (optional)
+\newcommand*{\xing}[1]{\cvsetsocial{xing}{#1}}
+
+% Defines writer's medium profile (optional)
+\newcommand*{\medium}[1]{\cvsetsocial{medium}{#1}}
+
+% Defines writer's kaggle (optional)
+\newcommand*{\kaggle}[1]{\cvsetsocial{kaggle}{#1}}
+
+% Defines writer's Hackerrank (optional)
+\newcommand*{\hackerrank}[1]{\cvsetsocial{hackerrank}{#1}}
+
+% Defines writer's google scholar profile (optional)
+% Usage: \googlescholar{<googlescholar userid>}{<googlescholar username>}
+% If the username is not provided, it defaults to '\firstname \lastname'.
+\newcommand*{\googlescholar}[2]{%
+  \ifthenelse{\equal{#2}{}}{%
+    \cvsetsocial{googlescholar}{#1,\@firstname~\@lastname}%
+  }{%
+    \cvsetsocial{googlescholar}{#1,#2}%
+  }%
+}

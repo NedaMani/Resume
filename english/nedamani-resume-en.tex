@@ -1,0 +1,71 @@
+% chktex-file 1
+
+% This template has been downloaded from:
+% https://github.com/posquit0/Awesome-CV
+
+% A4 paper size by default, use 'letterpaper' for US letter
+\documentclass[11pt, a4paper]{awesome-cv}
+\usepackage{datetime}
+% Configure page margins with geometry
+\geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.8cm, footskip=.5cm}
+
+% Set false if you don't want to highlight section with awesome color
+\setbool{acvSectionColorHighlight}{false}
+
+% If you would like to change the social information separator from a pipe (|) to something else
+\renewcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
+
+
+%-------------------------------------------------------------------------------
+%	PERSONAL INFORMATION
+%	Comment any of the lines below if they are not required
+%-------------------------------------------------------------------------------
+% Available options: circle|rectangle,edge/noedge,left/right
+% Photo removed for ATS compatibility (parsers can misread image-adjacent text
+% and many companies auto-reject photos for bias-compliance reasons)
+\photo{./images/nedamani.jpg}
+\name{Alireza Mohammadzadeh}{Nedamani}
+\position{Web Developer{\enskip\cdotp\enskip}Open Source Contributor{\enskip\cdotp\enskip}Linux Administrator}
+\address{Tehran, Iran}
+
+\mobile{(+98) 9104913836}
+\email{alireza3205@gmail.com}
+\github{NedaMani}
+\linkedin{NedaMani}
+\homepage{nedamani.ir}
+
+% PDF metadata: some ATS platforms read document properties for indexing
+\hypersetup{%
+  pdftitle={Alireza Mohammadzadeh Nedamani -\ Full Stack Developer Resume},
+  pdfauthor={Alireza Mohammadzadeh Nedamani},
+  pdfsubject={Resume -\ Full Stack Developer, Team Lead, DevOps Engineer},
+  pdfkeywords={Full Stack Developer, Backend Developer, Team Lead, DevOps Engineer, PHP, Laravel, Symfony, JavaScript, TypeScript, Node.js, NestJS, Next.js, React, Angular, Go, Golang, Kubernetes, Docker, CI/CD, AWS, Microservices, MySQL, PostgreSQL, MongoDB, Redis}
+}
+
+\begin{document}
+
+% Print the header with above personal information
+% Give optional argument to change alignment(C: center, L: left, R: right)
+\makecvheader
+
+% Print the footer with 3 arguments(<left>, <center>, <right>)
+% Leave any of these blank if they are not needed
+\makecvfooter
+  {\today}
+  {}
+  {\thepage}
+
+%	CV/RESUME CONTENT
+%	Each section is imported separately, open each file in turn to modify content
+\input{cv/summary.tex}
+\input{cv/skills.tex}
+\input{cv/experience.tex}
+%\input{cv/extracurricular.tex}
+%\input{cv/honors.tex}
+%\input{cv/certificates.tex}
+%\input{cv/presentation.tex}
+%\input{cv/writing.tex}
+%\input{cv/committees.tex}
+\input{cv/education.tex}
+
+\end{document}

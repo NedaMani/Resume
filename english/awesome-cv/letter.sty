@@ -1,0 +1,85 @@
+%% awesome-cv/letter.sty
+% Cover letter: content setters and rendering commands.
+\ProvidesPackage{awesome-cv/letter}[2026/09/28 v2.0 Awesome-CV letter]
+
+% Defines recipient's information (cover letter only)
+% Usage: \recipient{<recipient name>}{<recipient address>}
+% Usage: \recipientname{<recipient name>}
+% Usage: \recipientaddress{<recipient address>}
+\newcommand*{\recipient}[2]{\def\@recipientname{#1}\def\@recipientaddress{#2}}
+\newcommand*{\recipientname}[1]{\def\@recipientname{#1}}
+\newcommand*{\recipientaddress}[1]{\def\@recipientaddress{#1}}
+
+% Defines the title for letter (cover letter only, optional)
+% Usage: \lettertitle{<title>}
+\newcommand*{\lettertitle}[1]{\def\@lettertitle{#1}}
+
+% Defines the date for letter (cover letter only)
+% Usage: \letterdate{<date>}
+\newcommand*{\letterdate}[1]{\def\@letterdate{#1}}
+
+% Defines a message of opening for letter (cover letter only)
+% Usage: \letteropening{<message>}
+\newcommand*{\letteropening}[1]{\def\@letteropening{#1}}
+
+% Defines a message of closing for letter (cover letter only)
+% Usage: \letterclosing{<message>}
+\newcommand*{\letterclosing}[1]{\def\@letterclosing{#1}}
+
+% Defines an enclosure for letter (cover letter only, optional)
+% Usage: \letterenclosure[<enclosure name>]{<enclosure>}
+\newcommand*{\letterenclname}[1][Enclosure]{\def\@letterenclname{#1}}
+\newcommand*{\letterenclosure}[2][]{%
+  % if an optional argument is provided, use it to redefine \enclname
+  \ifthenelse{\equal{#1}{}}{}{\def\@letterenclname{#1}}
+  \def\@letterenclosure{#2}
+}
+
+% Define an environment for cvletter
+\newenvironment{cvletter}{%
+  \lettertextstyle
+}{%
+}
+
+% Define a section for the cover letter
+% Usage: \lettersection{<section-title>}
+\newcommand{\lettersection}[1]{%
+  \par\addvspace{2.5ex}
+  \phantomsection{}
+  \lettersectionstyle{#1}
+  \color{sectionDividerColor}\vhrulefill{0.9pt}
+  \par\nobreak\addvspace{0.4ex}
+  \lettertextstyle
+}
+
+% Define a title of the cover letter
+% Usage: \makelettertitle
+\newcommand*{\makelettertitle}{%
+  \vspace{8.4mm}
+  \setlength\tabcolsep{0pt}
+  \setlength{\extrarowheight}{0pt}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
+    \recipienttitlestyle{\@recipientname} & \letterdatestyle{\@letterdate}
+  \end{tabular*}
+  \begin{singlespace}
+    \recipientaddressstyle{\@recipientaddress} \\\\
+  \end{singlespace}
+  \ifthenelse{\isundefined{\@lettertitle}}
+    {}
+    {\lettertitlestyle{\@lettertitle} \\}
+  \lettertextstyle{\@letteropening}
+}
+
+% Define a closing of the cover letter
+% Usage: \makeletterclosing
+\newcommand*{\makeletterclosing}{%
+  \vspace{3.4mm}
+  \lettertextstyle{\@letterclosing} \\\\
+  \letternamestyle{\@firstname\ \@lastname}
+  \ifthenelse{\isundefined{\@letterenclosure}}
+    {\\}
+    {%
+      \\\\
+      \letterenclosurestyle{\@letterenclname: \@letterenclosure} \\
+    }
+}

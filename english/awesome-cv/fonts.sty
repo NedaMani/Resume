@@ -1,0 +1,31 @@
+%% awesome-cv/fonts.sty
+% Font roles and configuration.
+\ProvidesPackage{awesome-cv/fonts}[2026/09/28 v2.0 Awesome-CV fonts]
+
+% Font roles (stored, exposed via semantic macros)
+\newcommand*{\headerfont}{\csuse{@font@header}}
+\newcommand*{\headerfontlight}{\csuse{@font@headerlight}}
+\newcommand*{\footerfont}{\csuse{@font@footer}}
+\newcommand*{\bodyfont}{\csuse{@font@body}}
+\newcommand*{\bodyfontlight}{\csuse{@font@bodylight}}
+
+% Default font assignments
+\csdef{@font@header}{\roboto}
+\csdef{@font@headerlight}{\robotolight}
+\csdef{@font@footer}{\sourcesanspro}
+\csdef{@font@body}{\sourcesanspro}
+\csdef{@font@bodylight}{\sourcesansprolight}
+
+% Public configuration: set a font role.
+% Usage: \cvsetfont{body}{<font-command>}
+% Available roles: header, headerlight, body, bodylight, footer
+\newcommand*{\cvsetfont}[2]{%
+  \ifthenelse{\equal{#1}{header}}{\csdef{@font@header}{#2}}{%
+  \ifthenelse{\equal{#1}{headerlight}}{\csdef{@font@headerlight}{#2}}{%
+  \ifthenelse{\equal{#1}{body}}{\csdef{@font@body}{#2}}{%
+  \ifthenelse{\equal{#1}{bodylight}}{\csdef{@font@bodylight}{#2}}{%
+  \ifthenelse{\equal{#1}{footer}}{\csdef{@font@footer}{#2}}{%
+    \PackageError{awesome-cv/fonts}{Unknown font role `#1'}{%
+      Available roles: header, headerlight, body, bodylight, footer}%
+  }}}}}%
+}
