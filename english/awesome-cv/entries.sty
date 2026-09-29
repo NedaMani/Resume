@@ -1,5 +1,5 @@
 %% awesome-cv/entries.sty
-% CV entries: cventry, cvsubentry, cvhonor, cvskill, cvitems.
+% CV entries: cventry, cvhonor, cvskill, cvitems.
 \ProvidesPackage{awesome-cv/entries}[2026/09/28 v2.0 Awesome-CV entries]
 
 % Define an environment for cventry
@@ -13,9 +13,10 @@
 % Define an entry of cv information
 % Usage: \cventry{<position>}{<title>}{<location>}{<date>}{<description>}
 \newcommand*{\cventry}[5]{%
-  \vspace{2.0mm}
+  \vspace{1.0mm}
   \setlength\tabcolsep{0pt}
   \setlength{\extrarowheight}{0pt}
+  \renewcommand{\arraystretch}{0.93}%
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
     \ifempty{#2#3}
       {\entrypositionstyle{#1} & \entrydatestyle{#4} \\}
@@ -27,31 +28,6 @@
   \end{tabular*}%
 }
 
-% Define an environment for cvsubentry
-\newenvironment{cvsubentries}{%
-  \begin{center}
-}{%
-  \end{center}
-}
-
-% Define a subentry of cv information
-% Usage: \cvsubentry{<position>}{<title>}{<date>}{<description>}
-\newcommand*{\cvsubentry}[4]{%
-  \setlength\tabcolsep{0pt}
-  \setlength{\extrarowheight}{0pt}
-  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
-    \setlength\leftskip{0.2cm}
-    \subentrytitlestyle{#2} & \ifthenelse{\equal{#1}{}}
-      {\subentrydatestyle{#3}}{}
-    \ifthenelse{\equal{#1}{}}
-      {}
-      {\subentrypositionstyle{#1} & \subentrydatestyle{#3} \\}
-    \ifthenelse{\equal{#4}{}}
-      {}
-      {\multicolumn{2}{L{17.0cm}}{\subdescriptionstyle{#4}} \\}
-  \end{tabular*}
-}
-
 % Define an environment for cvhonor
 \newenvironment{cvhonors}{%
   \vspace{\acvSectionContentTopSkip}
@@ -59,7 +35,8 @@
   \begin{center}
     \setlength\tabcolsep{0pt}
     \setlength{\extrarowheight}{0pt}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{1.5cm} L{\textwidth - 4.0cm} R{2.5cm}}
+    \renewcommand{\arraystretch}{1}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{1.2cm} L{\textwidth - 3.7cm} R{2.5cm}}
 }{%
     \end{tabular*}
   \end{center}
@@ -76,9 +53,10 @@
   \vspace{\acvSectionContentTopSkip}
   \vspace{-2.0mm}
   \begin{center}
-    \setlength\tabcolsep{1ex}
+    \setlength\tabcolsep{0pt}
     \setlength{\extrarowheight}{0pt}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth * \real{0.85}}}
+    \renewcommand{\arraystretch}{1}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth - 3.2cm}}
 }{%
     \end{tabular*}
   \end{center}
@@ -92,13 +70,13 @@
 
 % Define an environment for cvitems (for cventry)
 \newenvironment{cvitems}{%
-  \vspace{-4.0mm}
+  \vspace{-4.8mm}
   \begin{justify}
   \begin{itemize}[leftmargin=2ex, nosep, noitemsep]
     \setlength{\parskip}{0pt}
-    \renewcommand{\labelitemi}{\bullet}
+    \renewcommand{\labelitemi}{\(\bullet\)}
 }{%
   \end{itemize}
   \end{justify}
-  \vspace{-4.0mm}
+  \vspace{-2.6mm}
 }

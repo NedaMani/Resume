@@ -5,41 +5,39 @@
 
 % A4 paper size by default, use 'letterpaper' for US letter
 \documentclass[11pt, a4paper]{awesome-cv}
-\usepackage{datetime}
 % Configure page margins with geometry
-\geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.8cm, footskip=.5cm}
+\geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.0cm, footskip=.5cm}
 
 % Set false if you don't want to highlight section with awesome color
 \setbool{acvSectionColorHighlight}{false}
 
 % If you would like to change the social information separator from a pipe (|) to something else
-\renewcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
+\renewcommand{\acvHeaderSocialSep}{\enspace\textbar\enspace}
 
 
 %-------------------------------------------------------------------------------
 %	PERSONAL INFORMATION
 %	Comment any of the lines below if they are not required
 %-------------------------------------------------------------------------------
-% Available options: circle|rectangle,edge/noedge,left/right
-% Photo removed for ATS compatibility (parsers can misread image-adjacent text
-% and many companies auto-reject photos for bias-compliance reasons)
-\photo{./images/nedamani.jpg}
+% No profile picture: \photo is left unset on purpose, the header then uses the
+% full text width and the block stays visually centered and balanced.
 \name{Alireza Mohammadzadeh}{Nedamani}
-\position{Web Developer{\enskip\cdotp\enskip}Open Source Contributor{\enskip\cdotp\enskip}Linux Administrator}
-\address{Tehran, Iran}
+\position{Web Developer}
+\address{Iran, Tehran}
 
-\mobile{(+98) 9104913836}
+\mobile{(+98) 9104844924}
 \email{alireza3205@gmail.com}
-\github{NedaMani}
-\linkedin{NedaMani}
 \homepage{nedamani.ir}
+\github{NedaMani}
+\linkedin{nedamani}
+\telegram{NedaManiOfficial}
 
 % PDF metadata: some ATS platforms read document properties for indexing
 \hypersetup{%
-  pdftitle={Alireza Mohammadzadeh Nedamani -\ Full Stack Developer Resume},
+  pdftitle={Alireza Mohammadzadeh Nedamani -\ Front-End Developer Resume},
   pdfauthor={Alireza Mohammadzadeh Nedamani},
-  pdfsubject={Resume -\ Full Stack Developer, Team Lead, DevOps Engineer},
-  pdfkeywords={Full Stack Developer, Backend Developer, Team Lead, DevOps Engineer, PHP, Laravel, Symfony, JavaScript, TypeScript, Node.js, NestJS, Next.js, React, Angular, Go, Golang, Kubernetes, Docker, CI/CD, AWS, Microservices, MySQL, PostgreSQL, MongoDB, Redis}
+  pdfsubject={Resume -\ Front-End Developer, Next.js and React},
+  pdfkeywords={Front-End Developer, Next.js, React, JavaScript, TypeScript, Tailwind CSS, Bootstrap, Redux, Zustand, TanStack Query, Vitest, DaisyUI, HTML, CSS, Sass, Material UI, Git}
 }
 
 \begin{document}

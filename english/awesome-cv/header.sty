@@ -1,16 +1,17 @@
 %% awesome-cv/header.sty
-% CV header: photo, name, position, address, social links, quote.
+% CV header: photo, name, position, address and social links.
 \ProvidesPackage{awesome-cv/header}[2026/09/28 v2.0 Awesome-CV header]
 
 % Header spacing/separator knobs (user-configurable via \renewcommand)
-\newcommand{\acvHeaderNameDelim}{\space}
-\newcommand{\acvHeaderAfterNameSkip}{.4mm}
+% The given name and the family name are stacked on two lines; the gap
+% between them is \acvHeaderNameLineSkip.
+\newcommand{\acvHeaderNameLineSkip}{1.2mm}
+\newcommand{\acvHeaderAfterNameSkip}{1.5mm}
 \newcommand{\acvHeaderAfterPositionSkip}{.4mm}
 \newcommand{\acvHeaderAfterAddressSkip}{-.5mm}
 \newcommand{\acvHeaderIconSep}{\space}
 \newcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
-\newcommand{\acvHeaderAfterSocialSkip}{6mm}
-\newcommand{\acvHeaderAfterQuoteSkip}{5mm}
+\newcommand{\acvHeaderAfterSocialSkip}{3mm}
 
 % Define a header for CV
 % Usage: \makecvheader
@@ -43,7 +44,8 @@
   \end{minipage}%
   \begin{minipage}[c]{\headertextwidth}
     \ifthenelse{\equal{#1}{L}}{\raggedright}{\ifthenelse{\equal{#1}{R}}{\raggedleft}{\centering}}
-    \headerfirstnamestyle{\@firstname}\headerlastnamestyle{{}\acvHeaderNameDelim\@lastname}%
+    \headerfirstnamestyle{\@firstname\\[\acvHeaderNameLineSkip]}%
+    \headerlastnamestyle{\@lastname}%
     \\[\acvHeaderAfterNameSkip]%
     \ifthenelse{\isundefined{\@position}}{}{\headerpositionstyle{\@position\\[\acvHeaderAfterPositionSkip]}}%
     \ifthenelse{\isundefined{\@address}}{}{\headeraddressstyle{\@address\\[\acvHeaderAfterAddressSkip]}}%
@@ -52,9 +54,6 @@
       \setbool{acv@social@start}{true}%
       \@for\@acv@social:=\@acv@social@order\do{\@acv@rendersocial{\@acv@social}}%
     } \\[\acvHeaderAfterSocialSkip]%
-    \ifthenelse{\isundefined{\@quote}}%
-      {}%
-      {\headerquotestyle{\@quote\\}\vspace{\acvHeaderAfterQuoteSkip}}%
   \end{minipage}%
   \begin{minipage}[c]{\headerphotowidth}%
     \ifthenelse{\equal{\@photoalign}{right}}{\raggedleft\drawphoto}{}

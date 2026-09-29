@@ -26,29 +26,22 @@
 \RequirePackage{fancyhdr}
 % Needed to manage colors
 \RequirePackage{xcolor}
-% Needed to use \ifxetex-\else-\fi statement
-\RequirePackage{ifxetex}
 % Needed to use \if-\then-\else statement
 \RequirePackage{xifthen}
 % Needed to strip chars from telephone number
 \RequirePackage{xstring}
 % Needed to use a toolbox of programming tools
 \RequirePackage{etoolbox}
-% Needed to change line spacing in specific environment
-\RequirePackage{setspace}
 % Needed to manage fonts
 \RequirePackage[quiet]{fontspec}
 % To support LaTeX quoting style
 \defaultfontfeatures{Ligatures=TeX}
-% Needed to manage math fonts
-\RequirePackage{unicode-math}
 % Needed to use icons from font-awesome
 \RequirePackage{fontawesome5}
 \RequirePackage{roboto}
 \RequirePackage[default,opentype]{sourcesanspro}
-% Needed for the photo ID
+% Needed for the optional profile picture (\photo)
 \RequirePackage{tikz}
-\RequirePackage[skins]{tcolorbox}
 % Needed to deal a paragraphs
 \RequirePackage{parskip}
 % Needed to deal hyperlink
@@ -75,4 +68,3 @@
 \RequirePackage{awesome-cv/footer}
 \RequirePackage{awesome-cv/sections}
 \RequirePackage{awesome-cv/entries}
-\RequirePackage{awesome-cv/letter}
