@@ -1,0 +1,128 @@
+%% awesome-cv/entries.sty
+% CV entries: cventry, cvhonor, cvskill, cvitems.
+% Persian edition: same environments, same spacing knobs and the same
+% "an entry is an unbreakable box" contract as the English module.
+\ProvidesPackage{awesome-cv/entries}[2026/09/28 v2.0 Awesome-CV entries (Persian)]
+
+% Entry spacing knobs (user-configurable via \renewcommand)
+%   \acvSectionContentTopSkip <- between the section rule and the first entry
+%   \acvEntrySep              <- between two entries of the same section
+%   \acvEntryDescriptionSkip  <- between the heading of an entry and its description
+%   \acvItemSkip              <- between two bullets of a description
+%   \acvSkillRowSep          <- between two skill categories
+%   \acvHonorRowSep          <- between two honors/certificates
+% Entries are unbreakable boxes, so a page break always happens *between*
+% entries and never inside one.
+\newcommand{\acvEntrySep}{3.5mm}
+\newcommand{\acvEntryDescriptionSkip}{2.2mm}
+\newcommand{\acvItemSkip}{0.9mm}
+\newcommand{\acvSkillRowSep}{1.8mm}
+\newcommand{\acvHonorRowSep}{1.4mm}
+
+% Define an environment for cventry
+\newenvironment{cventries}{%
+  \par\addvspace{\acvSectionContentTopSkip}%
+  \begingroup
+    \centering
+    \setlength{\parskip}{0pt}%
+}{%
+  \par
+  \endgroup
+}
+
+% Define an entry of cv information
+% Usage: \cventry{<position>}{<title>}{<location>}{<date>}{<description>}
+% The heading is a two-row table (title + position, date on the right) and the
+% description is a plain paragraph below it, both wrapped in a minipage so that
+% the whole entry stays together and can never be split by a page break. The
+% description is kept out of the table on purpose: a full width cell inside it
+% would be pushed down by the table strut, leaving a hole between the heading
+% and its description.
+% In RTL the table columns are emitted right-to-left, so the "L" column (title
+% / position) lands on the right and the "R" column (location / date) on the
+% left: the exact mirror image of the English layout.
+\newcommand*{\cventry}[5]{%
+  \par\addvspace{\acvEntrySep}%
+  \noindent
+  \begin{minipage}{\textwidth}%
+    \setlength{\parskip}{0pt}%
+    \setlength\tabcolsep{0pt}%
+    \setlength{\extrarowheight}{0pt}%
+    \renewcommand{\arraystretch}{1}%
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} L{\dimexpr\linewidth-4.5cm\relax} R{4.5cm}}
+      \ifempty{#2#3}
+        {\entrypositionstyle{#1} & \entrydatestyle{#4} \\}
+        {\entrytitlestyle{#2} & \entrylocationstyle{#3} \\
+        \entrypositionstyle{#1} & \entrydatestyle{#4} \\}
+    \end{tabular*}%
+    \par
+    \ifstrempty{#5}{}{%
+      \addvspace{\acvEntryDescriptionSkip}%
+      \descriptionstyle{#5}%
+      \par
+    }%
+  \end{minipage}%
+  \par
+}
+
+% Define an environment for cvhonor
+\newenvironment{cvhonors}{%
+  \par\addvspace{\acvSectionContentTopSkip}%
+  \begingroup
+    \centering
+    \setlength{\parskip}{0pt}%
+    \setlength\tabcolsep{0pt}%
+    \setlength{\extrarowheight}{\acvHonorRowSep}%
+    \renewcommand{\arraystretch}{1}%
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{1.2cm} L{\textwidth - 3.7cm} R{2.5cm}}
+}{%
+    \end{tabular*}%
+  \par
+  \endgroup
+}
+
+% Define a line of cv information (honor, award or something else)
+% Usage: \cvhonor{<position>}{<title>}{<location>}{<date>}
+\newcommand*{\cvhonor}[4]{%
+  \honordatestyle{#4} & \honorpositionstyle{#1}\ifempty{#2}{}{,} \honortitlestyle{#2} & \honorlocationstyle{#3} \\
+}
+
+% Define an environment for cvskill
+% The label column is an `r' column, i.e. it takes the width of the widest
+% category label. Vazirmatn is a wider face than the English body font and the
+% Persian labels are longer ("مهندسی هوش مصنوعی"), so the value column is
+% reserved 3.9cm instead of the English 3.2cm; otherwise the two columns
+% together exceed \textwidth and TeX reports an overfull alignment.
+\newenvironment{cvskills}{%
+  \par\addvspace{\acvSectionContentTopSkip}%
+  \begingroup
+    \centering
+    \setlength{\parskip}{0pt}%
+    \setlength\tabcolsep{0pt}%
+    \setlength{\extrarowheight}{\acvSkillRowSep}%
+    \renewcommand{\arraystretch}{1}%
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth - 3.9cm}}
+}{%
+    \end{tabular*}%
+  \par
+  \endgroup
+}
+
+% Define a line of cv information (skill)
+% Usage: \cvskill{<type>}{<skillset>}
+\newcommand*{\cvskill}[2]{%
+  \skilltypestyle{#1} & \skillsetstyle{#2} \\
+}
+
+% Define an environment for cvitems (for cventry)
+% The bullets are kept justified (a CV reads as a column of prose), and the
+% list is flush with the description, so all the vertical spacing around it
+% is owned by \cventry.
+\newenvironment{cvitems}{%
+  \justifying
+  \begin{itemize}[leftmargin=2ex, topsep=0pt, partopsep=0pt, parsep=0pt, itemsep=\acvItemSkip]
+    \setlength{\parskip}{0pt}%
+    \renewcommand{\labelitemi}{\(\bullet\)}%
+}{%
+  \end{itemize}%
+}

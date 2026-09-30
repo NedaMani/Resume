@@ -1,0 +1,14 @@
+%% awesome-cv/footer.sty
+% CV footer.
+% Persian edition: identical to the English module. fancyhdr mirrors
+% \fancyfoot[L]/\fancyfoot[R] under xepersian, so the date stays on the right.
+\ProvidesPackage{awesome-cv/footer}[2026/09/28 v2.0 Awesome-CV footer]
+
+% Define a footer for CV
+% Usage: \makecvfooter{<left>}{<center>}{<right>}
+\newcommand*{\makecvfooter}[3]{%
+  \fancyfoot{}
+  \fancyfoot[L]{\footerstyle{#1}}
+  \fancyfoot[C]{\footerstyle{#2}}
+  \fancyfoot[R]{\footerstyle{#3}}
+}

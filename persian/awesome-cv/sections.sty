@@ -1,0 +1,45 @@
+%% awesome-cv/sections.sty
+% Section titles.
+% Persian edition: identical to the English module. \addvspace/\hrulefill
+% are direction-agnostic, so the section rhythm is preserved in RTL.
+\ProvidesPackage{awesome-cv/sections}[2026/09/28 v2.0 Awesome-CV sections]
+
+% Section spacing knobs (user-configurable via \renewcommand)
+% The whole document rhythm is built from these two skips, every other
+% environment adds its own (see awesome-cv/entries.sty):
+%
+%   ... previous section content ...
+%   <\acvSectionTopSkip>              separation between two major sections
+%   Section Title --------------------
+%   <\acvSectionContentTopSkip>       separation between the rule and the content
+%   ... section content ...
+%
+% Note: \addvspace is used instead of \vspace so that consecutive skips are
+% merged (max) instead of added up, and \parskip is neutralised inside the
+% section so that the knobs above are the only thing setting the spacing.
+\newcommand{\acvSectionTopSkip}{4.5mm}
+\newcommand{\acvSectionContentTopSkip}{2.5mm}
+
+% Define a section for CV
+% Usage: \cvsection{<section-title>}
+\newcommand{\cvsection}[1]{%
+  \par\addvspace{\acvSectionTopSkip}%
+  \begingroup
+    \setlength{\parskip}{0pt}%
+    \noindent\sectionstyle{#1}%
+    \phantomsection
+    \color{sectionDividerColor}\vhrulefill{0.9pt}%
+    \par
+  \endgroup
+}
+
+% Define a paragraph for CV
+\newenvironment{cvparagraph}{%
+  \par\addvspace{\acvSectionContentTopSkip}%
+  \begingroup
+    \setlength{\parskip}{0pt}%
+    \paragraphstyle
+}{%
+    \par
+  \endgroup
+}

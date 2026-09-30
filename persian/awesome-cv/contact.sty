@@ -1,0 +1,41 @@
+%% awesome-cv/contact.sty
+% Personal identity information (content).
+% Persian edition: identical to the English module; the values are Persian
+% strings, the mechanism is direction-agnostic.
+\ProvidesPackage{awesome-cv/contact}[2026/09/28 v2.0 Awesome-CV contact]
+
+% Define photo ID
+% Usage: \photo[circle|rectangle,edge|noedge,left|right]{<path-to-image>}
+\newcommand{\photo}[2][circle,edge,left]{%
+  \def\@photo{#2}
+  \@for\tmp:=#1\do{%
+    \ifthenelse{\equal{\tmp}{circle} \or \equal{\tmp}{rectangle}}%
+      {\let\@photoshape\tmp}{}%
+    \ifthenelse{\equal{\tmp}{edge} \or \equal{\tmp}{noedge}}%
+      {\let\@photoedge\tmp}{}%
+    \ifthenelse{\equal{\tmp}{left} \or \equal{\tmp}{right}}%
+      {\let\@photoalign\tmp}{}%
+  }%
+}
+\def\@photoshape{circle}
+\def\@photoedge{edge}
+\def\@photoalign{left}
+
+% Define writer's name
+% Usage: \name{<firstname>}{<lastname>}
+% Usage: \firstname{<firstname>}
+% Usage: \lastname{<lastname>}
+% Usage: \familyname{<familyname>}
+\newcommand*{\name}[2]{\def\@firstname{#1}\def\@lastname{#2}}
+\newcommand*{\firstname}[1]{\def\@firstname{#1}}
+\newcommand*{\lastname}[1]{\def\@lastname{#1}}
+\newcommand*{\familyname}[1]{\def\@lastname{#1}}
+\def\@familyname{\@lastname}
+
+% Define writer's address
+% Usage: \address{<address>}
+\newcommand*{\address}[1]{\def\@address{#1}}
+
+% Define writer's position
+% Usage: \position{<position>}
+\newcommand*{\position}[1]{\def\@position{#1}}

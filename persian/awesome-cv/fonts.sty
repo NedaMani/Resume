@@ -1,0 +1,65 @@
+%% awesome-cv/fonts.sty
+% Font roles and configuration.
+% Persian edition: same role API as the English module, but every role is
+% bound to Vazirmatn. The Latin roles are Vazirmatn too (see the main
+% document, which also maps \setlatintextfont to Vazirmatn) so that mixed
+% Persian/English technical terms share one type design and one x-height.
+\ProvidesPackage{awesome-cv/fonts}[2026/09/28 v2.0 Awesome-CV fonts (Persian)]
+
+%--- Persian type faces -------------------------------------------------------
+% Vazirmatn ships no italic file, but the CV styles below ask for \itshape and
+% \slshape (address, entry dates, locations). Declaring the italics explicitly
+% with a small FakeSlant keeps those styles working and removes the
+% "Font shape `TU/Vazirmatn/m/it' undefined" substitutions from the log.
+%
+% The light face maps "bold" to SemiBold on purpose: Vazirmatn's real Bold is
+% noticeably heavier than the Light default, which would make a light-styled
+% element jump in weight when it is emphasised.
+
+\newfontfamily\vazirfont[
+  UprightFont=Vazirmatn-Regular,
+  BoldFont=Vazirmatn-Bold,
+  ItalicFont=Vazirmatn-Regular,
+  ItalicFeatures={FakeSlant=0.2},
+  BoldItalicFont=Vazirmatn-Bold,
+  BoldItalicFeatures={FakeSlant=0.2},
+  Script=Arabic
+]{Vazirmatn}
+
+\newfontfamily\vazirfontlight[
+  UprightFont=Vazirmatn-Light,
+  BoldFont=Vazirmatn-SemiBold,
+  ItalicFont=Vazirmatn-Light,
+  ItalicFeatures={FakeSlant=0.2},
+  BoldItalicFont=Vazirmatn-SemiBold,
+  BoldItalicFeatures={FakeSlant=0.2},
+  Script=Arabic
+]{Vazirmatn}
+
+% Font roles (stored, exposed via semantic macros)
+\newcommand*{\headerfont}{\csuse{@font@header}}
+\newcommand*{\headerfontlight}{\csuse{@font@headerlight}}
+\newcommand*{\footerfont}{\csuse{@font@footer}}
+\newcommand*{\bodyfont}{\csuse{@font@body}}
+\newcommand*{\bodyfontlight}{\csuse{@font@bodylight}}
+
+% Default font assignments
+\csdef{@font@header}{\vazirfont}
+\csdef{@font@headerlight}{\vazirfontlight}
+\csdef{@font@footer}{\vazirfontlight}
+\csdef{@font@body}{\vazirfont}
+\csdef{@font@bodylight}{\vazirfontlight}
+
+% Public configuration: set a font role.
+% Usage: \cvsetfont{body}{<font-command>}
+% Available roles: header, headerlight, body, bodylight, footer
+\newcommand*{\cvsetfont}[2]{%
+  \ifthenelse{\equal{#1}{header}}{\csdef{@font@header}{#2}}{%
+  \ifthenelse{\equal{#1}{headerlight}}{\csdef{@font@headerlight}{#2}}{%
+  \ifthenelse{\equal{#1}{body}}{\csdef{@font@body}{#2}}{%
+  \ifthenelse{\equal{#1}{bodylight}}{\csdef{@font@bodylight}{#2}}{%
+  \ifthenelse{\equal{#1}{footer}}{\csdef{@font@footer}{#2}}{%
+    \PackageError{awesome-cv/fonts}{Unknown font role `#1'}{%
+      Available roles: header, headerlight, body, bodylight, footer}%
+  }}}}}%
+}

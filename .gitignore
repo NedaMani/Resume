@@ -16,5 +16,6 @@
 *.fdb_latexmk
 *.fls
 *.xdv
+*.synctex
 *.synctex.gz
 *.DS_STORE

@@ -1,0 +1,63 @@
+%% awesome-cv/colors.sty
+% Color palette and semantic theme colors.
+% Persian edition: same semantic palette and \cvsetcolor API as the English
+% module, with one Persian adaptation in \@sectioncolor (see below).
+\ProvidesPackage{awesome-cv/colors}[2026/09/28 v2.0 Awesome-CV colors (Persian)]
+
+% Gray-scale colors
+\definecolor{darkgray}{HTML}{333333}
+\definecolor{gray}{HTML}{5D5D5D}
+\definecolor{lightgray}{HTML}{999999}
+
+% Text colors (semantic)
+\definecolor{headingColor}{HTML}{414141}
+\colorlet{textColor}{darkgray}
+\colorlet{secondaryTextColor}{gray}
+\colorlet{mutedTextColor}{lightgray}
+\colorlet{sectionDividerColor}{gray}
+
+% Theme accent color (default: awesome-red)
+\definecolor{awesome-red}{HTML}{DC3522}
+\colorlet{accentColor}{awesome-red}
+
+% Boolean value to switch section color highlighting
+\newbool{acvSectionColorHighlight}
+\setbool{acvSectionColorHighlight}{true}
+
+% Apply the accent color to the section title.
+% Persian adaptation: the English version colors only the first three
+% characters, which is impossible here -- splitting an Arabic-script title
+% after three glyphs would break the cursive letter joining and produce
+% disconnected, wrongly shaped letters. The whole title is colored instead.
+% The title must be supplied as a braced group (\@sectioncolor{#1}): an
+% unbraced single-token parameter would take just the first character and the
+% colour boundary would cut the word in half.
+\def\@sectioncolor#1{%
+  \ifbool{acvSectionColorHighlight}{{\color{accentColor}#1}}{#1}%
+}
+
+% Public configuration: set a semantic theme color.
+% Usage: \cvsetcolor{accentColor}{<color>}
+% Available options: accentColor, headingColor, textColor,
+%                    secondaryTextColor, mutedTextColor, sectionDividerColor
+\newcommand*{\cvsetcolor}[2]{%
+  \ifthenelse{\equal{#1}{accentColor}}{\colorlet{accentColor}{#2}}{%
+  \ifthenelse{\equal{#1}{headingColor}}{\colorlet{headingColor}{#2}}{%
+  \ifthenelse{\equal{#1}{textColor}}{\colorlet{textColor}{#2}}{%
+  \ifthenelse{\equal{#1}{secondaryTextColor}}{\colorlet{secondaryTextColor}{#2}}{%
+  \ifthenelse{\equal{#1}{mutedTextColor}}{\colorlet{mutedTextColor}{#2}}{%
+  \ifthenelse{\equal{#1}{sectionDividerColor}}{\colorlet{sectionDividerColor}{#2}}{%
+    \PackageError{awesome-cv/colors}{Unknown color option `#1'}{%
+      Available options: accentColor, headingColor, textColor,%
+      secondaryTextColor, mutedTextColor, sectionDividerColor}%
+  }}}}}}%
+}
+
+% Backwards-compatible aliases of the legacy Awesome-CV color names, so that
+% templates written against the original class keep working.
+\colorlet{awesome}{accentColor}
+\colorlet{darktext}{headingColor}
+\colorlet{text}{textColor}
+\colorlet{graytext}{secondaryTextColor}
+\colorlet{lighttext}{mutedTextColor}
+\colorlet{sectiondivider}{sectionDividerColor}
