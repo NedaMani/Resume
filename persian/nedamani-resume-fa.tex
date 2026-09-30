@@ -1,50 +1,35 @@
 % chktex-file 1
 
-% Persian edition of the resume.
-% Architecturally identical to english/nedamani-resume-en.tex: same class
-% options, same page geometry, same spacing knobs, same section order, same
-% modular cv/*.tex split. The language-specific parts are kept to a minimum
-% and marked below.
+% Persian edition of the resume: same class options, geometry, spacing and
+% section order as english/nedamani-resume-en.tex, with the RTL-specific parts
+% marked below.
 %
-% No `%!TEX program' / `%!TEX TS-program' magic comment here, on purpose.
-% LaTeX Workshop honours that comment by bypassing the configured recipes
-% entirely (compile/recipe.js: `latex.build.enableMagicComments' is true by
-% default) and running the bare program with `latex.magic.args', which contain
-% no -outdir. The result was that this file alone was compiled into persian/
-% while the English one went to english/build. Without the comment the
-% `XeLaTeX' recipe from .vscode/settings.json runs, exactly as for English.
+% No `%!TEX program' magic comment on purpose: LaTeX Workshop honours it by
+% bypassing the configured recipes, which sent the output to persian/ instead
+% of persian/build. Without it the `XeLaTeX' recipe from .vscode/settings.json
+% runs, exactly as for English.
 
-% This template has been downloaded from:
-% https://github.com/posquit0/Awesome-CV
+% Based on the Awesome-CV template: https://github.com/posquit0/Awesome-CV
 
-% A4 paper size by default, use 'letterpaper' for US letter
 \documentclass[11pt, a4paper]{awesome-cv}
-% Configure page margins with geometry
 \geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.0cm, footskip=.5cm}
 
-% Set false if you don't want to highlight section with awesome color
 \setbool{acvSectionColorHighlight}{true}
-
-% If you would like to change the social information separator from a pipe (|) to something else
 \renewcommand{\acvHeaderSocialSep}{\enspace\textbar\enspace}
 
 %-------------------------------------------------------------------------------
 % TYPOGRAPHY
 %-------------------------------------------------------------------------------
-% Mirrors english/nedamani-resume-en.tex. microtype must be loaded before
-% xepersian (below), since xepersian has to be the last package.
+% microtype must come before xepersian, which has to be the last package.
 \usepackage{microtype}
 
-% Line-breaking policy.
-% A CV is a list of short items, bullets and proper nouns, so a mid-word break
-% ("architec- / tures") reads much worse than a slightly looser line. Turning
-% hyphenation off is not enough on its own though: TeX would then have no legal
-% break point and would let lines run into the margin (overfull \hbox).
-% Disabling hyphenation while letting the word spaces absorb the slack
-% (\emergencystretch) keeps the text justified *and* inside the text block.
+% No mid-word breaks: a CV is a list of short items and proper nouns, so
+% "architec- / tures" reads much worse than a slightly looser line. Turning
+% hyphenation off alone would give TeX no legal break point and let lines run
+% into the margin, so \emergencystretch lets the word spaces absorb the slack.
 \hyphenpenalty=10000    % no automatic mid-word breaks
 \exhyphenpenalty=10000  % never break at an existing hyphen (front-end, AI-assisted, ...)
-\tolerance=9999         % accept the natural, stretched line breaks from above
+\tolerance=9999         % accept the stretched line breaks from above
 \emergencystretch=1em   % glue available to TeX before a line would overflow
 
 %-------------------------------------------------------------------------------
@@ -54,15 +39,14 @@
 % patches the directionality primitives of the whole document.
 \usepackage{xepersian}
 
-% Vazirmatn is the single typeface of the document. The Latin font is Vazirmatn
-% as well, so a Persian sentence containing TypeScript, React or RESTful API
-% shares one type design instead of switching to a visually unrelated family.
+% Vazirmatn is the only typeface of the document, Persian and Latin alike, so a
+% sentence mixing Persian with TypeScript or React keeps one type design.
 %
-% Vazirmatn ships no italic file, and the CV styles ask for \itshape (address)
-% and \slshape (entry dates, locations). Those switches reach the *Persian*
-% font as soon as a Persian glyph appears inside an italicised run, so the
-% italics have to be declared here as well as in awesome-cv/fonts.sty --
-% otherwise LaTeX silently falls back to upright and warns.
+% Vazirmatn ships no italic file, yet the CV styles ask for \itshape (address)
+% and \slshape (dates, locations). Those switches reach the *Persian* font as
+% soon as a Persian glyph appears in an italicised run, so the italics must be
+% faked here as well as in awesome-cv/fonts.sty, otherwise LaTeX silently falls
+% back to upright and warns.
 \settextfont[
   Scale=1,
   BoldFont=Vazirmatn-Bold,
@@ -82,10 +66,9 @@
   BoldItalicFeatures={FakeSlant=0.2}
 ]{Vazirmatn}
 
-% Digits. Vazirmatn carries Latin digits, so keeping the digit font in the same
-% family means the phone number, the page number and the Solar Hijri years all
-% share one type design. Persian prose still uses Persian digits, which is what
-% the dates in cv/*.tex rely on.
+% Vazirmatn carries Latin digits, so keeping the digit font in the same family
+% makes phone number, page number and Solar Hijri years share one type design.
+% Persian prose still uses Persian digits, which cv/*.tex rely on.
 \setdigitfont[
   BoldFont=Vazirmatn-Bold,
   ItalicFont=Vazirmatn-Regular,
@@ -96,20 +79,18 @@
 
 %-------------------------------------------------------------------------------
 %	PERSONAL INFORMATION
-%	Comment any of the lines below if they are not required
 %-------------------------------------------------------------------------------
-% Available options: circle|rectangle,edge/noedge,left|right
-% `left' puts the photo in the first of the three header minipages, which under
-% bidi is the right edge of the page - the correct position for an RTL CV.
+% \photo options: circle|rectangle, edge/noedge, left/right. `left' puts the
+% photo in the first of the three header minipages, which under bidi is the
+% right edge of the page - the correct position for an RTL CV.
 \photo{./images/nedamani.jpg}
 \name{علیرضا محمدزاده}{ندامانی}
 \position{توسعه‌دهنده وب}
 \address{تهران، ایران}
 
-% The social registry wraps every display value in \lr{} itself (see
-% awesome-cv/social.sty), so pass the raw number here: \mobile{} strips the
-% spaces, dashes and parentheses out of the value to build the tel: URI, and an
-% \lr{} wrapper inside the argument would end up inside the link target.
+% Raw number, no \lr{}: the social registry already wraps the value, and an
+% \lr{} inside this argument would end up inside the tel: URI that \mobile{}
+% builds from it.
 \mobile{(+98) 9104844924}
 \email{alireza3205@gmail.com}
 \homepage{nedamani.ir}
@@ -127,20 +108,16 @@
 
 \begin{document}
 
-% Print the header with above personal information
-% Give optional argument to change alignment(C: center, L: left, R: right)
+% \makecvheader[<alignment>] prints the personal information above
 \makecvheader
 
-% Print the footer with 3 arguments(<left>, <center>, <right>)
-% Leave any of these blank if they are not needed
+% \makecvfooter[<left>, <center>, <right>]; any argument may be left empty.
 % \today is the Solar Hijri "today" under xepersian, e.g. 6 مهر 1405.
 \makecvfooter
   {\today}
   {}
   {\thepage}
 
-%	CV/RESUME CONTENT
-%	Each section is imported separately, open each file in turn to modify content
 \input{cv/summary.tex}
 \input{cv/skills.tex}
 \input{cv/experience.tex}
