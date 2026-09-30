@@ -1,7 +1,9 @@
 %% awesome-cv/sections.sty
 % Section titles.
-% Persian edition: identical to the English module. \addvspace/\hrulefill
-% are direction-agnostic, so the section rhythm is preserved in RTL.
+% Persian edition of the English module. \addvspace/\hrulefill are
+% direction-agnostic, but \cvsection has one bidi-specific adaptation: the
+% closing \par is issued *after* \endgroup instead of before it. See the note
+% on \cvsection below.
 \ProvidesPackage{awesome-cv/sections}[2026/09/28 v2.0 Awesome-CV sections]
 
 % Section spacing knobs (user-configurable via \renewcommand)
@@ -18,10 +20,20 @@
 % merged (max) instead of added up, and \parskip is neutralised inside the
 % section so that the knobs above are the only thing setting the spacing.
 \newcommand{\acvSectionTopSkip}{4.5mm}
-\newcommand{\acvSectionContentTopSkip}{2.5mm}
+\newcommand{\acvSectionContentTopSkip}{2mm}
 
 % Define a section for CV
 % Usage: \cvsection{<section-title>}
+%
+% The \par closing the heading paragraph must come *after* \endgroup, not
+% before it. \endgroup restores \parskip and pops the xcolor group, and under
+% xepersian doing that while the paragraph is already closed opens a fresh
+% empty RTL paragraph in the vertical list. That empty paragraph is charged
+% \parskip (6.8pt, the value the `parskip' package installs class-wide) plus a
+% full \baselineskip (13.6pt), i.e. ~20pt of dead space between the section
+% rule and the content of every single section -- roughly double the English
+% gap, and completely invisible in the source. Ending the paragraph *outside*
+% the group closes it directly and leaves the rhythm identical to English.
 \newcommand{\cvsection}[1]{%
   \par\addvspace{\acvSectionTopSkip}%
   \begingroup
@@ -29,8 +41,8 @@
     \noindent\sectionstyle{#1}%
     \phantomsection
     \color{sectionDividerColor}\vhrulefill{0.9pt}%
-    \par
   \endgroup
+  \par
 }
 
 % Define a paragraph for CV

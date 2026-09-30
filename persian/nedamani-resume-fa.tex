@@ -1,5 +1,3 @@
-%!TEX TS-program = xelatex
-%!TEX encoding = UTF-8 Unicode
 % chktex-file 1
 
 % Persian edition of the resume.
@@ -7,6 +5,14 @@
 % options, same page geometry, same spacing knobs, same section order, same
 % modular cv/*.tex split. The language-specific parts are kept to a minimum
 % and marked below.
+%
+% No `%!TEX program' / `%!TEX TS-program' magic comment here, on purpose.
+% LaTeX Workshop honours that comment by bypassing the configured recipes
+% entirely (compile/recipe.js: `latex.build.enableMagicComments' is true by
+% default) and running the bare program with `latex.magic.args', which contain
+% no -outdir. The result was that this file alone was compiled into persian/
+% while the English one went to english/build. Without the comment the
+% `XeLaTeX' recipe from .vscode/settings.json runs, exactly as for English.
 
 % This template has been downloaded from:
 % https://github.com/posquit0/Awesome-CV
