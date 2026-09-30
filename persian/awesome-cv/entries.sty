@@ -114,15 +114,229 @@
   \skilltypestyle{#1} & \skillsetstyle{#2} \\
 }
 
+%-------------------------------------------------------------------------------
+% PER-ITEM DIRECTION DETECTION
+%-------------------------------------------------------------------------------
+% A cvitems list mixes Persian and English bullets, so the direction cannot be a
+% property of the list: the same list holds Persian sentences (RTL, bullet on
+% the right) and \lr{...} technology lists (LTR, bullet on the left). The
+% direction is therefore decided for every \item on its own, from the first
+% meaningful character of its own text, and handed to bidi through \setRTL /
+% \setLTR. That single switch is what moves the bullet label to the correct edge
+% and decides which side the line is flushed to; the font, the bullet glyph,
+% the indentation and the spacing are untouched.
+%
+% The decision is a token walk over the item argument; it is described in full
+% further down, at the walk itself. In short:
+%   * \lr, \LR, \LRE and \beginL mark the item LTR, \rl, \RL, \RLE and \beginR
+%     mark it RTL,
+%   * the first letter decides: a Persian/Arabic letter makes the item RTL, any
+%     other letter (Latin, and Latin with accents) makes it LTR,
+%   * whitespace, digits, punctuation, braces and other commands are skipped, so
+%     \item {\lr{TypeScript, ...}} and \item {(TypeScript)} agree,
+%   * an item that says nothing at all keeps the direction of the document, i.e.
+%     RTL in this edition.
+
+\newif\ifacv@item@rtl            % direction decided for the current \item
+\newif\ifacv@item@dir@done       % a marker or a letter has answered the scan
+\newif\ifacv@item@dir@letter     % the answer came from the first letter
+\newif\ifacv@item@dir@letter@rtl % ... and that letter is a Persian one
+\newcount\acv@item@dir@mark     % 0: no marker, 1: \rl family, 2: \lr family
+
+% \acv@listed@of<list macro>: \acv@listedtrue when the token in
+% \acv@item@dir@test is one of the tokens <list macro> expands to.
+%
+% The list is put in the input stream and walked one comma-terminated entry at a
+% time, which is what keeps the comparison honest: the direction commands have
+% to be matched by name and never expanded, because \lr swallows the next token
+% as its argument and \LR, \LRE and friends expand to \protect\pLRE. Both sides
+% of every \ifx are \let to the token they compare, because \ifx tells a \let
+% copy and a \def copy of the same token apart.
+%
+% Two details keep the recursion honest. It is the last thing the body does, so
+% that the comma scan cannot swallow a \fi of an enclosing conditional; and the
+% end of the list is handled by disabling the recursion rather than by guarding
+% it, because the walk reads the stream and would otherwise walk on into the rest
+% of the document. The sentinel expands to nothing, so that a walk that stops
+% early leaves nothing behind but an empty token.
+\newif\ifacv@listed
+\def\acv@listed@end{}
+\def\acv@listed@next{\acv@listed@i}
+\def\acv@listed@i#1,{%
+  \let\acv@listed@probe#1%
+  \ifx\acv@item@dir@test\acv@listed@probe\acv@listedtrue\fi
+  \ifx#1\acv@listed@end
+    \let\acv@listed@next\relax
+  \else
+    \let\acv@listed@next\acv@listed@i
+  \fi
+  \acv@listed@next
+}
+% \acv@listed@of takes its list unbraced: the list is what gets expanded.
+\def\acv@listed@of#1{%
+  \acv@listedfalse
+  \let\acv@listed@next\acv@listed@i
+  \expandafter\acv@listed@i#1,\acv@listed@end,%
+}
+
+% Persian and Arabic letters, i.e. every letter that typesets right to left.
+\def\acv@item@rtl@chars{ا,ب,پ,ت,ث,ج,چ,ح,خ,د,ذ,ر,ز,ژ,س,ش,ص,ض,ط,ظ,ع,غ,ف,ق,ک,گ,ل,م,ن,و,ه,ی,ء,آ,أ,إ,ؤ,ئ,ة,ى,ۀ,ٱ}
+% Explicit direction commands. Only the names that exist are listed: the walk
+% expands a list while it matches it, and an undefined name would be an error
+% there. \LR and \LRE are listed next to \lr because an item may be written with
+% any of them.
+\def\acv@item@ltr@marks{\lr,\LR,\LRE,\beginL}
+\def\acv@item@rtl@marks{\rl,\RL,\RLE,\beginR}
+
+% The scan over the item text.
+%
+% The text is walked token by token. \acv@item@dir@walk peeks at the next token
+% with \futurelet, \acv@item@dir@take ends the walk at the end sentinel, and
+% \acv@item@dir@grab has the peeked token read as an argument, looks at it and
+% asks the walk for the one behind it. The token is looked at as it was written:
+% \futurelet does not expand, and the argument of \acv@item@dir@grab is read with
+% a protected command (\lr is one) left alone. So the scan sorts each token into
+% the three kinds an item can start with:
+%   * a direction command decides - \lr and friends LTR, \rl and friends RTL,
+%   * a letter decides - a Persian/Arabic letter makes the item RTL, any other
+%     letter LTR,
+%   * anything else - whitespace, a digit, a brace, a piece of punctuation, any
+%     other command - says nothing, and the walk carries on with the token behind
+%     it.
+% The first answer wins: a marker beats the letter behind it, and a letter beats
+% the direction of the document. Tokens after the answer are dropped without
+% being looked at again.
+%
+% The order of these three is not free. A macro argument is read from the current
+% position in the input, so \acv@item@dir@take has to be the last thing
+% \acv@item@dir@walk does - that is where the text is - and the argument of
+% \acv@item@dir@grab is read where the body of \acv@item@dir@take has run out,
+% which is why the classification sits in a macro of its own and the call to the
+% walk is the last thing in that macro. The walk cannot be called from a loop of
+% its own for the same reason: the loop's own tokens would come between it and
+% the text.
+%
+% What the scan drops is still typeset: \acv@item@typeset copies the text before
+% the scan and typesets the copy.
+\def\acv@item@dir@end{}                    % end of the text, expands to nothing
+\def\acv@item@dir@letter{a}                % catcode probe for \ifcat
+\def\acv@item@dir@walk{\futurelet\acv@item@tok\acv@item@dir@take}
+\def\acv@item@dir@take{%
+  \ifx\acv@item@tok\acv@item@dir@end
+    % The end of the text. The sentinel is left in the input, where it expands
+    % to nothing, and the walk is not asked again.
+    \let\acv@item@dir@drop\relax
+  \else
+    \let\acv@item@dir@drop\acv@item@dir@grab
+  \fi
+  \acv@item@dir@drop
+}
+\long\def\acv@item@dir@grab#1{%
+  \acv@item@dir@classify{#1}%
+  \acv@item@dir@walk
+}
+\def\acv@item@dir@classify#1{%
+  \ifacv@item@dir@done
+  \else
+    \let\acv@item@dir@test#1%
+    \acv@listed@of\acv@item@ltr@marks
+    \ifacv@listed
+      \acv@item@dir@mark=2\relax
+      \acv@item@dir@donetrue
+    \else
+      \acv@listed@of\acv@item@rtl@marks
+      \ifacv@listed
+        \acv@item@dir@mark=1\relax
+        \acv@item@dir@donetrue
+      \else
+        % \ifcat expands what it compares, which is harmless here: the only
+        % tokens that can be expanded are commands, and they are not letters
+        % anyway. A command that is not a direction command is expanded, its
+        % argument with it, and the walk goes on after that.
+        \ifcat#1\acv@item@dir@letter
+          \acv@item@dir@lettertrue
+          \acv@listed@of\acv@item@rtl@chars
+          \ifacv@listed\acv@item@dir@letter@rtltrue
+          \else\acv@item@dir@letter@rtlfalse\fi
+          \acv@item@dir@donetrue
+        \fi
+      \fi
+    \fi
+  \fi
+}
+
+% \acv@item@dir@of{<item text>} -> \ifacv@item@rtl
+% <item text> is walked destructively, the walk first and the text right behind
+% it; the caller copies the text before the call and typesets the copy.
+\def\acv@item@dir@of#1{%
+  \acv@item@dir@mark=0\relax
+  \acv@item@dir@donefalse
+  \acv@item@dir@letterfalse
+  \acv@item@dir@walk#1\acv@item@dir@end
+  \ifnum\acv@item@dir@mark=1
+    \acv@item@rtltrue
+  \else
+    \ifnum\acv@item@dir@mark=2
+      \acv@item@rtlfalse
+    \else
+      \ifacv@item@dir@letter
+        \ifacv@item@dir@letter@rtl\acv@item@rtltrue\else\acv@item@rtlfalse\fi
+      \else
+        % Nothing in the text said anything, so the item keeps the direction of
+        % the document, which is RTL in this edition.
+        \@ifundefined{@RTL}{\acv@item@rtlfalse}{%
+          \if@RTL\acv@item@rtltrue\else\acv@item@rtlfalse\fi}%
+      \fi
+    \fi
+  \fi
+}
+
+% The wrapped \item. \acv@stditem is LaTeX's own \item, captured inside the list.
+% \item [<label>]{<text>} and \item {<text>} are both wrapped, and the previous
+% item's paragraph is closed *before* \setRTL/\setLTR runs, so the direction
+% change cannot touch the line that has just been broken and the label box is
+% built in the direction of the new item.
+%
+% The text has to be a braced argument, which is what the CV uses and what
+% \item[<label>]{<text>} already implies. An \item whose text is not braced is
+% handed straight back to LaTeX's \item, which typesets it as before in the
+% direction of the document: the scan needs the text as an argument, and reading
+% it up to the end of the paragraph would swallow the \end{itemize}.
+% \@ifnextchar takes the token to look for first, then the two branches:
+% \@ifnextchar[{\mylabelled}{\no} looks for a [, and \@ifnextchar\bgroup
+% {\mybraced}{\no} for an opening brace.
+\def\acv@item{\@ifnextchar[{\acv@item@labelled}{\@ifnextchar\bgroup{\acv@item@braced}{\acv@stditem}}}
+% Both arguments of \acv@item@typeset are single groups: the text is passed in
+% braces of its own, so that the argument is read as one token however many
+% tokens it holds.
+\def\acv@item@braced#1{\acv@item@typeset{\acv@stditem}{#1}}
+\def\acv@item@labelled#1#2{\acv@item@typeset{\acv@stditem[#1]}{#2}}
+\def\acv@item@typeset#1#2{%
+  % #1 is the \item to run, with or without a label; #2 is the text.
+  % The scan consumes the text, so a copy of it is taken first and the copy is
+  % what finally gets typeset.
+  \long\def\acv@item@dir@text{#2}%
+  \acv@item@dir@of{#2}%
+  \par
+  \ifacv@item@rtl\setRTL\else\setLTR\fi
+  #1%
+  \acv@item@dir@text
+}
+
 % Define an environment for cvitems (for cventry)
 % The bullets are kept justified (a CV reads as a column of prose), and the
 % list is flush with the description, so all the vertical spacing around it
-% is owned by \cventry.
+% is owned by \cventry. \item is wrapped (see "per-item direction detection"
+% above) so that every bullet picks up the direction of its own text: the list
+% itself is neither made RTL nor made LTR, which is what allows Persian and
+% English bullets to sit side by side in the same cvitems.
 \newenvironment{cvitems}{%
   \justifying
   \begin{itemize}[leftmargin=2ex, topsep=0pt, partopsep=0pt, parsep=0pt, itemsep=\acvItemSkip]
     \setlength{\parskip}{0pt}%
     \renewcommand{\labelitemi}{\(\bullet\)}%
+    \let\acv@stditem\item
+    \let\item\acv@item
 }{%
   \end{itemize}%
 }
