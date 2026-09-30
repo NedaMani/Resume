@@ -1,0 +1,345 @@
+<svg
+  width="900"
+  height="300"
+  viewBox="0 0 900 300"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f3f3f3"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow
+        dx="0"
+        dy="12"
+        stdDeviation="12"
+        flood-opacity="0.15"
+      />
+    </filter>
+
+    <style>
+      .latex {
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 700;
+      }
+
+      .label {
+        font-family: Inter, Arial, sans-serif;
+        font-weight: 600;
+      }
+
+      .paper {
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
+      /* Resume 1 */
+      .persian {
+        animation: persian 6s ease-in-out infinite;
+      }
+
+      /* Resume 2 */
+      .english {
+        animation: english 6s ease-in-out infinite;
+      }
+
+      .cursor {
+        animation: blink 1s steps(2) infinite;
+      }
+
+      @keyframes persian {
+        0%, 35% {
+          opacity: 1;
+          transform: translateX(0) rotate(-5deg);
+        }
+
+        45%, 85% {
+          opacity: 0;
+          transform: translateX(-35px) rotate(-10deg);
+        }
+
+        100% {
+          opacity: 1;
+          transform: translateX(0) rotate(-5deg);
+        }
+      }
+
+      @keyframes english {
+        0%, 35% {
+          opacity: 0;
+          transform: translateX(35px) rotate(10deg);
+        }
+
+        45%, 85% {
+          opacity: 1;
+          transform: translateX(0) rotate(5deg);
+        }
+
+        100% {
+          opacity: 0;
+          transform: translateX(35px) rotate(10deg);
+        }
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="300" rx="24" fill="#fafafa"/>
+
+  <!-- Decorative LaTeX mark -->
+  <g transform="translate(90 75)">
+    <text
+      class="latex"
+      x="0"
+      y="65"
+      font-size="72"
+      fill="#111"
+    >
+      LaTeX
+    </text>
+
+    <!-- animated underline -->
+    <rect
+      x="3"
+      y="82"
+      width="205"
+      height="3"
+      rx="2"
+      fill="#111"
+    >
+      <animate
+        attributeName="width"
+        values="0;205;205;0"
+        keyTimes="0;0.2;0.8;1"
+        dur="6s"
+        repeatCount="indefinite"
+      />
+    </rect>
+
+    <text
+      class="label"
+      x="4"
+      y="115"
+      font-size="14"
+      fill="#777"
+      letter-spacing="2"
+    >
+      RESUME / CV
+    </text>
+  </g>
+
+  <!-- Resume papers -->
+  <g transform="translate(530 55)" filter="url(#shadow)">
+
+    <!-- Persian resume -->
+    <g class="paper persian">
+      <rect
+        width="230"
+        height="190"
+        rx="10"
+        fill="url(#paper)"
+      />
+
+      <!-- header -->
+      <rect
+        x="25"
+        y="25"
+        width="110"
+        height="10"
+        rx="5"
+        fill="#222"
+      />
+
+      <rect
+        x="25"
+        y="45"
+        width="70"
+        height="6"
+        rx="3"
+        fill="#aaa"
+      />
+
+      <!-- Persian content -->
+      <text
+        x="205"
+        y="82"
+        text-anchor="end"
+        font-family="Arial, sans-serif"
+        font-size="17"
+        fill="#222"
+      >
+        رزومه
+      </text>
+
+      <text
+        x="205"
+        y="105"
+        text-anchor="end"
+        font-family="Arial, sans-serif"
+        font-size="12"
+        fill="#888"
+      >
+        فارسی
+      </text>
+
+      <line
+        x1="25"
+        y1="130"
+        x2="205"
+        y2="130"
+        stroke="#ddd"
+      />
+
+      <line
+        x1="25"
+        y1="150"
+        x2="180"
+        y2="150"
+        stroke="#ddd"
+      />
+
+      <line
+        x1="25"
+        y1="165"
+        x2="195"
+        y2="165"
+        stroke="#ddd"
+      />
+
+      <!-- Persian badge -->
+      <rect
+        x="145"
+        y="25"
+        width="60"
+        height="24"
+        rx="12"
+        fill="#111"
+      />
+
+      <text
+        x="175"
+        y="42"
+        text-anchor="middle"
+        font-family="Arial, sans-serif"
+        font-size="11"
+        fill="white"
+      >
+        فارسی
+      </text>
+    </g>
+
+    <!-- English resume -->
+    <g class="paper english">
+      <rect
+        width="230"
+        height="190"
+        rx="10"
+        fill="url(#paper)"
+      />
+
+      <rect
+        x="25"
+        y="25"
+        width="110"
+        height="10"
+        rx="5"
+        fill="#222"
+      />
+
+      <rect
+        x="25"
+        y="45"
+        width="70"
+        height="6"
+        rx="3"
+        fill="#aaa"
+      />
+
+      <text
+        x="25"
+        y="82"
+        font-family="Arial, sans-serif"
+        font-size="17"
+        font-weight="600"
+        fill="#222"
+      >
+        Resume
+      </text>
+
+      <text
+        x="25"
+        y="105"
+        font-family="Arial, sans-serif"
+        font-size="12"
+        fill="#888"
+      >
+        English
+      </text>
+
+      <line
+        x1="25"
+        y1="130"
+        x2="205"
+        y2="130"
+        stroke="#ddd"
+      />
+
+      <line
+        x1="25"
+        y1="150"
+        x2="180"
+        y2="150"
+        stroke="#ddd"
+      />
+
+      <line
+        x1="25"
+        y1="165"
+        x2="195"
+        y2="165"
+        stroke="#ddd"
+      />
+
+      <rect
+        x="145"
+        y="25"
+        width="60"
+        height="24"
+        rx="12"
+        fill="#111"
+      />
+
+      <text
+        x="175"
+        y="42"
+        text-anchor="middle"
+        font-family="Arial, sans-serif"
+        font-size="11"
+        fill="white"
+      >
+        EN
+      </text>
+    </g>
+  </g>
+
+  <!-- Animated status -->
+  <text
+    x="450"
+    y="270"
+    text-anchor="middle"
+    class="label"
+    font-size="13"
+    fill="#888"
+  >
+    <tspan>Two languages</tspan>
+    <tspan class="cursor">_</tspan>
+  </text>
+</svg>
